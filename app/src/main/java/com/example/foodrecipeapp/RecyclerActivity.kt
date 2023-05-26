@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 class RecyclerActivity : AppCompatActivity() {
     private lateinit var adapter: FoodTypeAdapter
     private lateinit var exampleList: MutableList<FoodType>
-    private lateinit var recyclerView: RecyclerView
+    public lateinit var recyclerView: RecyclerView
     private lateinit var drawerFragment: NavigationDrawerFragment
 
     @SuppressLint("UseRequireInsteadOfGet")

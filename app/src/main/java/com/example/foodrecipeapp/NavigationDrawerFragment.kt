@@ -38,18 +38,30 @@ class NavigationDrawerFragment : Fragment(R.layout.fragment_navigation_drawer) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val toolbar: Toolbar = view.findViewById(R.id.toolbar)
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
 
-        drawer = view.findViewById(R.id.drawer_layout)
+        if (activity is RecyclerActivity) {
+            drawer = view.findViewById(R.id.drawer_layout)
+            toggle = object : ActionBarDrawerToggle(
+                requireActivity(), drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close
+            ) {
+                override fun onDrawerOpened(drawerView: View) {
+                    (activity as RecyclerActivity).recyclerView.visibility = View.INVISIBLE
+                    super.onDrawerOpened(drawerView)
+                }
 
-        toggle = ActionBarDrawerToggle(
-            requireActivity(), drawer, toolbar,
-            R.string.navigation_drawer_open, R.string.navigation_drawer_close
-        )
+                override fun onDrawerClosed(drawerView: View) {
+                    (activity as RecyclerActivity).recyclerView.visibility = View.VISIBLE
+                    super.onDrawerClosed(drawerView)
+                }
+            }
+        }
+
         drawer.addDrawerListener(toggle)
         toggle.syncState()
+
 
 
         var navigationView = drawer.findViewById<NavigationView>(R.id.nav_view)!!
@@ -113,6 +125,7 @@ class NavigationDrawerFragment : Fragment(R.layout.fragment_navigation_drawer) {
             drawer.closeDrawer(GravityCompat.START)
         }
     }
+
 
     private fun getPhotoFile(fileName: String): File {
         // Use `getExternalFilesDir` on Context to access package-specific directories.
